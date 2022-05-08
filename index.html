@@ -298,7 +298,7 @@
 		</div>
 
 		
-		<div  class="content-section-c ">
+		<div id="contact" class="content-section-c">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 col-md-offset-3 text-center white">
@@ -362,30 +362,11 @@
     <footer>
       <div class="container">
         <div class="row">
-          <div class="col-md-7">
-            
+          <div class="col-md-12">
             <p>
+				Copyright &copy; <span class="year"></span> Richard Nesbitt. All Rights Reserved.
             </p>
-			
-			<!-- LICENSE -->
-		
-		   
-	   
-          </div> <!-- /col-xs-7 -->
-
-          <div class="col-md-5">
-            <div class="footer-banner">
-              <h3 class="footer-title">Flatfy Theme</h3>
-              <ul>
-                <li>12 Column Grid Bootstrap</li>
-                <li>Form Contact</li>
-                <li>Drag Gallery</li>
-                <li>Full Responsive</li>
-                <li>Lorem Ipsum</li>
-              </ul>
-            Shared by <i class="fa fa-love"></i><a href="https://bootstrapthemes.co">BootstrapThemes</a>
-            </div>
-          </div>
+          </div> <!-- /col-md-12 -->
         </div>
       </div>
     </footer>
@@ -395,16 +376,58 @@
     <script src="js/bootstrap.js"></script>
 	<script src="js/owl.carousel.js"></script>
 	<script src="js/script.js"></script>
-	<!-- StikyMenu -->
-	<script src="js/stickUp.min.js"></script>
+	<!-- StickyMenu -->
 	<script type="text/javascript">
-	  jQuery(function($) {
-		$(document).ready( function() {
-		  $('.navbar-default').stickUp();
-		  
-		});
-	  });
-	
+
+		// ensure the video is always covering the hero area without being distorted
+		function sizeVideo() {
+			// get vh and vw of the viewport
+			let vh = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+			let vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+			let nativeRatio = 0.5625 //calculate the h/w ratio of the raw video file
+
+			//if it's landscape and the ratio is <= the native ratio, set it to 100vw
+			if( vw > vh && vh / vw <= nativeRatio ) {
+				document.querySelector('#myVideo').style.width = '100vw';
+				document.querySelector('#myVideo').style.height = 'auto';
+			} else {
+				document.querySelector('#myVideo').style.height = '100vh';
+				document.querySelector('#myVideo').style.width = 'auto';
+			}
+		}
+
+		// determine height of nav element and distance from the top of the viewport
+		let navElement = document.querySelector('nav');
+		let screenTop = navElement.offsetTop;
+		let navHeight = navElement.offsetHeight;
+		
+		window.onscroll = function() {
+			// get the current position of the top of the page
+			var y = (document.documentElement && document.documentElement.scrollTop) || document.body.scrollTop;
+
+			// if the current position is >= the distance between the top of the page and the nav, then it's at the top, make it sticky.
+			if ( y >= parseInt(screenTop) ) {
+				console.log('Passed Top');
+				navElement.classList.add('isStuck');
+				// add margin to the top of the <main> to prevent the 'jump' when the nav goes sticky
+				// gotta compensate for the missing pixels :)
+				document.querySelector('main').style.marginTop = navHeight + 'px';
+			} else {
+				navElement.classList.remove('isStuck');
+				document.querySelector('main').style.marginTop = 0;
+			}
+
+		}
+		window.onload = function() {
+			var year = new Date();
+			document.querySelector('.year').innerHTML = year.getFullYear();
+			sizeVideo();
+		}
+
+		window.onresize = function() {
+			sizeVideo();
+		}	  
+
 	</script>
 	<!-- Smoothscroll -->
 	<script type="text/javascript" src="js/jquery.corner.js"></script> 
